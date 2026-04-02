@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi Vendor Ecommerce</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#f1f5f9;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    .navbar{
+      background:#1e293b;
+      color:white;
+      padding:15px 30px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .navbar h2 span{
+      color:#38bdf8;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+      padding:25px;
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:25px;
+    }
+
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h2{
+      margin-bottom:15px;
+    }
+
+    label{
+      display:block;
+      margin-top:10px;
+      font-weight:bold;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding:10px;
+      margin-top:5px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+
+    button{
+      width:100%;
+      margin-top:15px;
+      padding:12px;
+      border:none;
+      border-radius:6px;
+      background:#2563eb;
+      color:white;
+      cursor:pointer;
+      font-size:15px;
+    }
+
+    button:hover{
+      background:#1d4ed8;
+    }
+
+    .delete-btn{
+      background:#dc2626;
+      margin-top:8px;
+    }
+
+    .delete-btn:hover{
+      background:#b91c1c;
+    }
+
+    .checkout-btn{
+      background:#16a34a;
+      margin-top:15px;
+    }
+
+    .checkout-btn:hover{
+      background:#15803d;
+    }
+
+    .logout-btn{
+      background:#ef4444;
+      padding:10px 18px;
+      width:auto;
+      margin-top:0;
+    }
+
+    .logout-btn:hover{
+      background:#dc2626;
+    }
+
+    .products{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:15px;
+    }
+
+    .product-box{
+      border:1px solid #ddd;
+      padding:15px;
+      border-radius:8px;
+      background:#fafafa;
+    }
+
+    .product-box h3{
+      margin-bottom:6px;
+    }
+
+    .price{
+      color:green;
+      font-weight:bold;
+      margin:6px 0;
+    }
+
+    .vendor{
+      font-size:13px;
+      color:#555;
+    }
+
+    .cart{
+      margin-top:30px;
+    }
+
+    .total{
+      margin-top:12px;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .empty{
+      padding:20px;
+      color:#777;
+      text-align:center;
+    }
+
+    .top-controls{
+      display:flex;
+      gap:15px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+
+    .top-controls input,
+    .top-controls select{
+      flex:1;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:15px;
+      margin-bottom:20px;
+    }
+
+    .stat-box{
+      background:#e2e8f0;
+      padding:15px;
+      border-radius:8px;
+      text-align:center;
+    }
+
+    .stat-box h3{
+      font-size:24px;
+      margin-bottom:5px;
+      color:#0f172a;
+    }
+
+    .stat-box p{
+      color:#475569;
+      font-size:14px;
+    }
+
+    .login-wrapper{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .login-card{
+      width:100%;
+      max-width:420px;
+      background:white;
+      padding:30px;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .login-card h1{
+      text-align:center;
+      margin-bottom:10px;
+      color:#0f172a;
+    }
+
+    .login-card p{
+      text-align:center;
+      color:#64748b;
+      margin-bottom:20px;
+    }
+
+    .order-summary{
+      margin-top:25px;
+      padding:15px;
+      border:1px solid #d1d5db;
+      border-radius:8px;
+      background:#f8fafc;
+    }
+
+    .order-summary h3{
+      margin-bottom:10px;
+    }
+
+    .order-item{
+      padding:8px 0;
+      border-bottom:1px solid #e5e7eb;
+    }
+
+    .order-item:last-child{
+      border-bottom:none;
+    }
+
+    .success-box{
+      margin-top:15px;
+      background:#dcfce7;
+      color:#166534;
+      padding:12px;
+      border-radius:8px;
+      font-weight:bold;
+      text-align:center;
+    }
+
+    @media(max-width:900px){
+      .container{
+        grid-template-columns:1fr;
+      }
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div id="loginPage" class="login-wrapper">
+    <div class="login-card">
+      <h1>Multi Vendor Ecommerce</h1>
+      <p>Login to continue</p>
+
+      <label for="loginName">Name</label>
+      <input type="text" id="loginName" placeholder="Enter your name" />
+
+      <label for="loginRole">Login As</label>
+      <select id="loginRole">
+        <option value="">Select role</option>
+        <option value="Vendor">Vendor</option>
+        <option value="Customer">Customer</option>
+        <option value="Admin">Admin</option>
+      </select>
+
+      <button onclick="loginUser()">Login</button>
+    </div>
+  </div>
+
+  <!-- MAIN PAGE -->
+  <div id="mainPage" class="hidden">
+    <div class="navbar">
+      <h2>🛒 Multi Vendor <span>Ecommerce</span></h2>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span id="welcomeText">Welcome</span>
+        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- LEFT PANEL -->
+      <div class="card">
+        <h2>Vendor Dashboard</h2>
+
+        <label>Vendor Name</label>
+        <input type="text" id="vendorName" placeholder="Enter vendor name">
+
+        <label>Product Name</label>
+        <input type="text" id="productName" placeholder="Enter product name">
+
+        <label>Category</label>
+        <select id="category">
+          <option value="">Select category</option>
+          <option>Electronics</option>
+          <option>Clothing</option>
+          <option>Books</option>
+          <option>Home Appliances</option>
+        </select>
+
+        <label>Price</label>
+        <input type="number" id="price" placeholder="Enter price">
+
+        <label>Description</label>
+        <textarea id="description" rows="4" placeholder="Enter description"></textarea>
+
+        <button onclick="addProduct()">Add Product</button>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="card">
+
+        <div class="stats">
+          <div class="stat-box">
+            <h3 id="totalProducts">0</h3>
+            <p>Total Products</p>
+          </div>
+          <div class="stat-box">
+            <h3 id="totalCartItems">0</h3>
+            <p>Cart Items</p>
+          </div>
+          <div class="stat-box">
+            <h3 id="totalCartPrice">₹0</h3>
+            <p>Cart Total</p>
+          </div>
+        </div>
+
+        <h2>Products</h2>
+
+        <div class="top-controls">
+          <input type="text" id="searchInput" placeholder="Search by product, vendor, category" onkeyup="renderProducts()">
+          <select id="filterCategory" onchange="renderProducts()">
+            <option value="All">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Books">Books</option>
+            <option value="Home Appliances">Home Appliances</option>
+          </select>
+        </div>
+
+        <div id="productList" class="products"></div>
+
+        <div class="cart">
+          <h2>Cart</h2>
+          <div id="cartList" class="products"></div>
+          <div class="total" id="cartTotal"></div>
+          <button class="checkout-btn" onclick="checkout()">Checkout</button>
+
+          <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div id="orderSummaryContent">No order placed yet.</div>
+          </div>
+
+          <div id="successMessage"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let products = JSON.parse(localStorage.getItem("products")) || [
+      {
+        vendorName: "Tech Store",
+        productName: "Laptop Bag",
+        category: "Electronics",
+        price: 600,
+        description: "Waterproof laptop bag"
+      },
+      {
+        vendorName: "Yoga Studio",
+        productName: "Zenith Pro Yoga Mat",
+        category: "Home Appliances",
+        price: 360,
+        description: "Non-slip, eco-friendly natural rubber yoga mat."
+      },
+      {
+        vendorName: "Hydro Gear",
+        productName: "Insulated Steel Flask",
+        category: "Home Appliances",
+        price: 840,
+        description: "Double-wall vacuum insulated 750ml stainless steel bottle."
+      }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+    let lastOrder = JSON.parse(localStorage.getItem("lastOrder")) || [];
+
+    function saveProducts(){
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    function saveCart(){
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function saveCurrentUser(){
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    }
+
+    function saveLastOrder(){
+      localStorage.setItem("lastOrder", JSON.stringify(lastOrder));
+    }
+
+    function showMainPage(){
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("mainPage").classList.remove("hidden");
+
+      if(currentUser){
+        document.getElementById("welcomeText").innerText =
+          "Welcome, " + currentUser.name + " (" + currentUser.role + ")";
+      }
+
+      renderProducts();
+      renderCart();
+      renderOrderSummary();
+      updateStats();
+
+      if(currentUser && currentUser.role !== "Vendor" && currentUser.role !== "Admin"){
+        document.querySelector(".container").children[0].style.display = "none";
+      } else {
+        document.querySelector(".container").children[0].style.display = "block";
+      }
+    }
+
+    function showLoginPage(){
+      document.getElementById("loginPage").classList.remove("hidden");
+      document.getElementById("mainPage").classList.add("hidden");
+    }
+
+    function loginUser(){
+      const name = document.getElementById("loginName").value.trim();
+      const role = document.getElementById("loginRole").value;
+
+      if(!name || !role){
+        alert("Please enter name and select role.");
+        return;
+      }
+
+      currentUser = { name, role };
+      saveCurrentUser();
+      showMainPage();
+    }
+
+    function logoutUser(){
+      currentUser = null;
+      localStorage.removeItem("currentUser");
+      showLoginPage();
+    }
+
+    function addProduct(){
+      if(!currentUser || (currentUser.role !== "Vendor" && currentUser.role !== "Admin")){
+        alert("Only Vendor or Admin can add products.");
+        return;
+      }
+
+      let vendorName = document.getElementById("vendorName").value.trim();
+      let productName = document.getElementById("productName").value.trim();
+      let category = document.getElementById("category").value;
+      let price = document.getElementById("price").value.trim();
+      let description = document.getElementById("description").value.trim();
+
+      if(!vendorName || !productName || !category || !price || !description){
+        alert("Please fill all fields.");
+        return;
+      }
+
+      let product = {
+        vendorName,
+        productName,
+        category,
+        price,
+        description
+      };
+
+      products.push(product);
+      saveProducts();
+      renderProducts();
+      updateStats();
+
+      document.getElementById("vendorName").value = "";
+      document.getElementById("productName").value = "";
+      document.getElementById("category").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("description").value = "";
+    }
+
+    function deleteProduct(index){
+      if(!currentUser || (currentUser.role !== "Vendor" && currentUser.role !== "Admin")){
+        alert("Only Vendor or Admin can delete products.");
+        return;
+      }
+
+      products.splice(index, 1);
+      saveProducts();
+      renderProducts();
+      updateStats();
+    }
+
+    function renderProducts(){
+      let list = document.getElementById("productList");
+      list.innerHTML = "";
+
+      let searchText = document.getElementById("searchInput")
+        ? document.getElementById("searchInput").value.toLowerCase()
+        : "";
+
+      let selectedCategory = document.getElementById("filterCategory")
+        ? document.getElementById("filterCategory").value
+        : "All";
+
+      let filteredProducts = products.filter((product) => {
+        let matchesSearch =
+          product.productName.toLowerCase().includes(searchText) ||
+          product.vendorName.toLowerCase().includes(searchText) ||
+          product.category.toLowerCase().includes(searchText);
+
+        let matchesCategory =
+          selectedCategory === "All" || product.category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      if(filteredProducts.length === 0){
+        list.innerHTML = "<div class='empty'>No matching products found.</div>";
+        return;
+      }
+
+      filteredProducts.forEach((product) => {
+        let originalIndex = products.indexOf(product);
+
+        list.innerHTML += `
+          <div class="product-box">
+            <h3>${product.productName}</h3>
+            <p>${product.category}</p>
+            <p class="price">₹${product.price}</p>
+            <p>${product.description}</p>
+            <p class="vendor">Vendor: ${product.vendorName}</p>
+            <button onclick="addToCart(${originalIndex})">Add to Cart</button>
+            <button class="delete-btn" onclick="deleteProduct(${originalIndex})">Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    function addToCart(index){
+      cart.push(products[index]);
+      saveCart();
+      renderCart();
+      updateStats();
+      alert("Product added to cart.");
+    }
+
+    function removeFromCart(index){
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+      updateStats();
+    }
+
+    function renderCart(){
+      let cartList = document.getElementById("cartList");
+      let total = document.getElementById("cartTotal");
+
+      cartList.innerHTML = "";
+      let sum = 0;
+
+      if(cart.length === 0){
+        cartList.innerHTML = "<div class='empty'>Cart is empty.</div>";
+        total.innerHTML = "";
+        return;
+      }
+
+      cart.forEach((item, i) => {
+        sum += Number(item.price);
+
+        cartList.innerHTML += `
+          <div class="product-box">
+            <h3>${item.productName}</h3>
+            <p>${item.category}</p>
+            <p class="price">₹${item.price}</p>
+            <p class="vendor">Vendor: ${item.vendorName}</p>
+            <button class="delete-btn" onclick="removeFromCart(${i})">Remove</button>
+          </div>
+        `;
+      });
+
+      total.innerHTML = "Total: ₹" + sum;
+    }
+
+    function checkout(){
+      const successBox = document.getElementById("successMessage");
+
+      if(cart.length === 0){
+        alert("Cart is empty.");
+        return;
+      }
+
+      lastOrder = [...cart];
+      saveLastOrder();
+
+      cart = [];
+      saveCart();
+
+      renderCart();
+      renderOrderSummary();
+      updateStats();
+
+      successBox.innerHTML = "<div class='success-box'>Order placed successfully!</div>";
+    }
+
+    function renderOrderSummary(){
+      const container = document.getElementById("orderSummaryContent");
+
+      if(!lastOrder || lastOrder.length === 0){
+        container.innerHTML = "No order placed yet.";
+        return;
+      }
+
+      let total = 0;
+      let html = "";
+
+      lastOrder.forEach((item) => {
+        total += Number(item.price);
+        html += `
+          <div class="order-item">
+            <strong>${item.productName}</strong><br>
+            Category: ${item.category}<br>
+            Vendor: ${item.vendorName}<br>
+            Price: ₹${item.price}
+          </div>
+        `;
+      });
+
+      html += `<div style="margin-top:10px;font-weight:bold;">Order Total: ₹${total}</div>`;
+      container.innerHTML = html;
+    }
+
+    function updateStats(){
+      document.getElementById("totalProducts").innerText = products.length;
+      document.getElementById("totalCartItems").innerText = cart.length;
+
+      let totalPrice = 0;
+      cart.forEach((item) => {
+        totalPrice += Number(item.price);
+      });
+
+      document.getElementById("totalCartPrice").innerText = "₹" + totalPrice;
+    }
+
+    if(currentUser){
+      showMainPage();
+    } else {
+      showLoginPage();
+    }
+  </script>
+</body>
+</html>
