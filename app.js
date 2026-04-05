@@ -73,16 +73,16 @@ function loginUser() {
   window.location.href = "dashboard.html";
 }
 
-/* Logout */
+/* Logout — fixed: redirects to index.html (the login page) */
 function logoutUser() {
   localStorage.removeItem("currentUser");
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
 
 /* Dashboard */
 function initDashboard() {
   if (!currentUser) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
     return;
   }
 
