@@ -108,7 +108,7 @@ Ecommerce-platform/
 3rd Year CSE Student
 
 [![GitHub](https://img.shields.io/badge/GitHub-snigdhaxk-black?style=flat-square&logo=github)](https://github.com/snigdhaxk)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/snigdha-kundana-molugu-b6b250302/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/snigdha-kundana-molugu-b6b250302)
 
 ---
 
